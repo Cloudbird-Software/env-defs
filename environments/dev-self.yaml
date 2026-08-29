@@ -6,20 +6,20 @@ version: 1
 name: dev-self
 scope: drift-check（W4-R1 起纳入对账；当前=声明骨架，零漂移基线）
 topology:
-  anchor: public-server          # 池化锚点（唯一出入口+调度+票据签发，ADR-0103 决策 4）
+  anchor: public-server # 池化锚点（唯一出入口+调度+票据签发，ADR-0103 决策 4）
   workers:
-    - cloud-desktop-pool          # 执行 worker 面（无状态约束，W2-C1 起执法）
-  secret_store: vault             # 内网 Vault（执行面凭据面）
-  llm_route: llm-router           # 计量经 metering wrapper 归账（ADR-0062）
+    - cloud-desktop-pool # 执行 worker 面（无状态约束，W2-C1 起执法）
+  secret_store: vault # 内网 Vault（执行面凭据面）
+  llm_route: llm-router # 计量经 metering wrapper 归账（ADR-0062）
 images:
   runtime: owner-fill（worker 基础镜像 pin——镜像 digest @sha256）
 network:
-  egress_allowlist:               # worker 出向白名单（W2-C1 调度器执法；当前=PM 会话自律面）
+  egress_allowlist: # worker 出向白名单（W2-C1 调度器执法；当前=PM 会话自律面）
     - api.github.com
     - LLM endpoint（owner-fill 域名）
     - 内网 Vault 地址（owner-fill）
-  ingress: none                   # worker 无入向暴露
-secrets:                          # 引用非值
+  ingress: none # worker 无入向暴露
+secrets: # 引用非值
   - ref: vault:<path owner-fill>/github-pm-token
   - ref: vault:<path owner-fill>/feishu-credentials
 resources:
@@ -27,4 +27,4 @@ resources:
   cpu_per_worker: owner-fill
   mem_per_worker: owner-fill
 tenants:
-  - cloudbird                     # 本环境默认 tenant（计量 tag，W1-B2）
+  - cloudbird # 本环境默认 tenant（计量 tag，W1-B2）
