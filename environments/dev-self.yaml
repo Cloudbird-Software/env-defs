@@ -1,0 +1,30 @@
+version: 1
+# env: dev-self —— 云内网开发环境期望态（IR-0006 W1-C2 / IFACE-05）
+# 三面分离声明面载体：本文件=期望态；实况快照落 reports/；对账引擎=W4-R1 泛化 drift。
+# 铁律：secret 只记引用名（Vault 路径），值永不进 git（INV-04）。
+# 数值标 owner-fill 的由 owner 填真实值——agent 不编造资产事实。
+name: dev-self
+scope: drift-check（W4-R1 起纳入对账；当前=声明骨架，零漂移基线）
+topology:
+  anchor: public-server # 池化锚点（唯一出入口+调度+票据签发，ADR-0103 决策 4）
+  workers:
+    - cloud-desktop-pool # 执行 worker 面（无状态约束，W2-C1 起执法）
+  secret_store: vault # 内网 Vault（执行面凭据面）
+  llm_route: llm-router # 计量经 metering wrapper 归账（ADR-0062）
+images:
+  runtime: owner-fill（worker 基础镜像 pin——镜像 digest @sha256）
+network:
+  egress_allowlist: # worker 出向白名单（W2-C1 调度器执法；当前=PM 会话自律面）
+    - api.github.com
+    - LLM endpoint（owner-fill 域名）
+    - 内网 Vault 地址（owner-fill）
+  ingress: none # worker 无入向暴露
+secrets: # 引用非值
+  - ref: vault:<path owner-fill>/github-pm-token
+  - ref: vault:<path owner-fill>/feishu-credentials
+resources:
+  worker_count: owner-fill
+  cpu_per_worker: owner-fill
+  mem_per_worker: owner-fill
+tenants:
+  - cloudbird # 本环境默认 tenant（计量 tag，W1-B2）
