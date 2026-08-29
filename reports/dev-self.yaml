@@ -20,7 +20,7 @@ network:
     - api.github.com
     - LLM endpoint（owner-fill 域名）
     - 内网 Vault 地址（owner-fill）
-  ingress: none
+  ingress: ssh-open  # AC-8a 实测注入偏差
 secrets:
   - ref: vault:<path owner-fill>/github-pm-token
   - ref: vault:<path owner-fill>/feishu-credentials
