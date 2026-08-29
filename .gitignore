@@ -2,7 +2,8 @@ node_modules/
 __pycache__/
 dist/
 coverage/
-reports/
+# env-defs 特例：reports/ = 漂移快照落点（dev-self.yaml 声明），须入库作对账证据
+# （模板通用 reports/ 忽略条目移除，IR-0006 W1-C2）
 .env
 .env.*
 !.env.example
