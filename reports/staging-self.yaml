@@ -1,0 +1,28 @@
+version: 1
+# report: staging-self —— 云内网 staging 实况快照基线（IR-0006 W4-R1 / IFACE-05）
+# 骨架期基线：与 environments/staging-self.yaml 期望态一致（零漂移基线）。
+# 真实上报器上线后由其覆盖；owner-fill 字段对账跳过（声明骨架期合法）。
+reported_by: env-reporter-stub
+reported_at: "2026-08-29T00:00:00Z"
+name: staging-self
+scope: declared-only（骨架；实况上报与对账 W4-R1 落地）
+topology:
+  anchor: public-server
+  workers:
+    - cloud-desktop-pool（staging 分区 owner-fill）
+  secret_store: vault
+  llm_route: llm-router
+images:
+  runtime: owner-fill（staging 基础镜像 pin @sha256）
+network:
+  egress_allowlist:
+    - api.github.com
+    - LLM endpoint（owner-fill 域名）
+  ingress: none
+secrets:
+  - ref: vault:<path owner-fill>/staging-credentials
+resources:
+  worker_count: owner-fill
+  quota_note: staging 与 dev 共享池时须分区计量（tenant tag 区分）
+tenants:
+  - cloudbird
